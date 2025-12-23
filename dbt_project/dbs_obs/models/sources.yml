@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw CSV files loaded into DuckDB"
+    tables:
+      - name: ticket_purchases
+        description: "Raw ticket purchase events with duplicates and late arrivals"
+      
+      - name: matches
+        description: "Match schedule with teams and stadiums"
+      
+      - name: teams
+        description: "Team lookup table"
+      
+      - name: stadiums
+        description: "Stadium information"
