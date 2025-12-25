@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
 WITH source AS (
-    SELECT * FROM read_csv_auto('data/ticket_purchases_raw.csv', header=true)
+    SELECT * FROM {{ source('raw', 'ticket_events') }}
 ),
 
 with_lag AS (

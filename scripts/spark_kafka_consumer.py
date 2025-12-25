@@ -11,6 +11,7 @@ schema = StructType([
     StructField("ticket_id", StringType()),
     StructField("match_id", StringType()),
     StructField("user_id", StringType()),
+    StructField("user_email", StringType()),
     StructField("user_name", StringType()),
     StructField("stadium", StringType()),
     StructField("quantity", IntegerType()),

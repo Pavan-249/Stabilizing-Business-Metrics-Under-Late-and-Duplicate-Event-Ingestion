@@ -1,17 +1,19 @@
-version: 2
+version: 3
 
 sources:
   - name: raw
     description: "Raw CSV files loaded into DuckDB"
     tables:
-      - name: ticket_purchases
-        description: "Raw ticket purchase events with duplicates and late arrivals"
-      
+      - name: ticket_events
+        description: "Raw ticket events from Spark Parquet output (duplicates + late arrivals)"
+        schema: raw
       - name: matches
         description: "Match schedule with teams and stadiums"
-      
+        schema: main
+
       - name: teams
         description: "Team lookup table"
-      
+        schema: main      
       - name: stadiums
         description: "Stadium information"
+        schema: main

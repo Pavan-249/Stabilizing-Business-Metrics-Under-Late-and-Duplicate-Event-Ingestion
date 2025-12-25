@@ -16,6 +16,6 @@ for i, row in df.iterrows():
 
     if i % 500 == 0:
         print(f"Sent {i} events")
-        time.sleep(2)  # Simulate a small delay between events
+        time.sleep(1)  # Simulate a small delay between events
 producer.flush()
 print("Finished sending ticket purchase events")
