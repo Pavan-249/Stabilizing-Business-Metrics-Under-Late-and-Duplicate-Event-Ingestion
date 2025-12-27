@@ -7,7 +7,7 @@ In a real setup, ticket bookings pass through multiple systems such as the booki
 This project simulates that reality and shows how raw sales numbers can change over time, and how a data pipeline can eventually produce stable and reliable metrics.
 
 
-<img src="https://images2.minutemediacdn.com/image/upload/c_crop,w_5085,h_2860,x_0,y_248/c_fill,w_2160,ar_16:9,f_auto,q_auto,g_auto/images%2FGettyImages%2Fmmsport%2F90min_en_international_web%2F01gmkc3h0qh2ch31ebcb.jpg" width="250" height="100" alt="WC 2022 winners">
+<img src="https://images2.minutemediacdn.com/image/upload/c_crop,w_5085,h_2860,x_0,y_248/c_fill,w_2160,ar_16:9,f_auto,q_auto,g_auto/images%2FGettyImages%2Fmmsport%2F90min_en_international_web%2F01gmkc3h0qh2ch31ebcb.jpg" width="800" height="600" alt="WC 2022 winners">
 
 ## Overview
 In real-time data systems, business metrics often change after they are first reported.  
@@ -145,13 +145,13 @@ To demonstrate drift, the same sale date is observed at different ingestion time
 
 If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
 
-<img src="dbt_project/dbs_obs/metric_instability" width="250" height="100" alt="Instable Model">
+<img src="dbt_project/dbs_obs/metric_instability.png" width="600" height="400" alt="Instable Model">
 
 ---
 
 ### Mart Model
 With the Mart model for the same sale 20th December, observe the stability,
-<img src="dbt_project/dbs_obs/mart_stability.png" width="250" height="100" alt="Stable Model">
+<img src="dbt_project/dbs_obs/mart_stability.png" width="600" height="400" alt="Stable Model">
 
 ## Visualization
 
