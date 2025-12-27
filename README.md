@@ -1,20 +1,3 @@
-Welcome to your new dbt project!
-
-### Using the starter project
-
-Try running the following commands:
-- dbt run
-- dbt test
-
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
-
-
 # Metric Instability in Real-Time Ticket Sales Pipelines
 
 ## Overview
@@ -42,8 +25,9 @@ As a result:
 - Numbers change retroactively  
 - Dashboards can lose trust  
 
-This project recreates that scenario end-to-end.
+As data engineers we often take time to go back to the logs and check what is really causing the issue. The problem is not the metrics only by themselves but also the added panic, hours of debugging and potential financial disasters.
 
+In this project, I built a robust pipeline that de-duplicates redundant transactions and reports consistent metrics.
 ---
 
 ## What This Project Demonstrates
@@ -147,9 +131,12 @@ To demonstrate drift, the same sale date is observed at different ingestion time
 | T0 + 1 day | 5,575 |
 | Final | 7,285 |
 
-Even though the sale date never changes, the metric grows as late data arrives — just like in real-world dashboards.
-
+If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
+![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Stable Model")
 ---
+
+### With the Mart model for the same sale 20th December, observe the stability,
+![Alt text](dbt_project/dbs_obs/mart_stability.png?raw=true "Stable Model")
 
 ## Visualization
 
@@ -161,16 +148,6 @@ The project includes a plot (`metric_instability.csv`) showing how ticket counts
 
 Generated using **Matplotlib**.
 
-
-## Why This Matters
-
-This project highlights why production analytics systems must:
-- Separate **event time** from **ingestion time**  
-- Expect and handle **duplicates** in streaming systems  
-- Avoid deriving business metrics directly from raw streams  
-- Use **staging and mart** layers to enforce correctness  
-
-> Real-time does not mean correct-time.
 
 ---
 
