@@ -6,9 +6,8 @@ dbt_project/.DS_Store
 dbt_project/dbs_obs/.DS_Store
 dbt_project/dbs_obs/data/streaming_output
 dbt_project/dbs_obs/metric_instability.csv
-data/ticket_sales_data.duckdb
 data/*
-diagrams/*
+# data/streaming_output/*
 
 *.duckdb
 *.db
