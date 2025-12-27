@@ -7,3 +7,5 @@ scripts/data
 ticket_sales.duckdb
 dbt_project/.DS_Store
 dbt_project/dbs_obs/.DS_Store
+dbt_project/dbs_obs/data/streaming_output
+dbt_project/dbs_obs/metric_instability.csv

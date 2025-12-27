@@ -1,7 +1,7 @@
 import duckdb
 import os
 
-con = duckdb.connect('ticket_sales.duckdb')
+con = duckdb.connect('data/ticket_sales_data.duckdb')
 
 print("Loading Parquet files to DuckDB")
 

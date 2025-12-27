@@ -4,21 +4,15 @@ WITH source AS (
     SELECT * FROM {{ source('raw', 'ticket_events') }}
 ),
 
-with_lag AS (
-    SELECT 
-        *,
-        EXTRACT(EPOCH FROM (ingest_timestamp - purchase_timestamp)) AS ingestion_lag_seconds
-    FROM source
-),
 
 deduplicated AS (
     SELECT 
         *,
         ROW_NUMBER() OVER (
-            PARTITION BY ticket_id 
-            ORDER BY purchase_timestamp ASC, ingest_timestamp ASC
+        PARTITION BY ticket_id
+        ORDER BY purchase_timestamp, ingest_timestamp
         ) AS row_num
-    FROM with_lag
+    FROM source
 )
 SELECT 
     ticket_id,
@@ -31,7 +25,6 @@ SELECT
     stadium,
     price,
     purchase_timestamp,
-    ingest_timestamp,
-    ingestion_lag_seconds
+    ingest_timestamp
 FROM deduplicated
 WHERE row_num = 1

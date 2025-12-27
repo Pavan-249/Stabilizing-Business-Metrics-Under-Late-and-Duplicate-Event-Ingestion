@@ -8,7 +8,7 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode("utf-8")
 )
 
-df = pd.read_csv("/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/ticket_purchases_raw.csv")
+df = pd.read_csv("/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/transaction_data.csv")
 
 for i, row in df.iterrows():
     event = row.to_dict()

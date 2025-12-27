@@ -27,7 +27,6 @@ enriched_tickets AS (
         t.price,
         t.quantity,
         t.ticket_type,
-        t.ingestion_lag_seconds,
         m.match_date,
         home.team_name AS home_team,
         away.team_name AS away_team,
@@ -46,21 +45,16 @@ daily_aggregates AS (
         home_team,
         away_team,
         stadium_name,
-        
         COUNT(DISTINCT ticket_id) AS tickets_sold,
         SUM(quantity) AS total_quantity,
         SUM(price) AS total_revenue,
         AVG(price) AS avg_transaction_value,
         
-        -- By section
         SUM(CASE WHEN ticket_type = 'GA' THEN quantity ELSE 0 END) AS general_tickets,
         SUM(CASE WHEN ticket_type = 'Student' THEN quantity ELSE 0 END) AS student_tickets,
         SUM(CASE WHEN ticket_type = 'VIP' THEN quantity ELSE 0 END) AS vip_tickets,
         
-        -- Data quality metrics
-        AVG(ingestion_lag_seconds) AS avg_ingestion_lag_seconds,
-        MAX(ingestion_lag_seconds) AS max_ingestion_lag_seconds,
-        
+                
         CURRENT_TIMESTAMP AS last_updated_at
         
     FROM enriched_tickets

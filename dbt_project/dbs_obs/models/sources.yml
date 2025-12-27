@@ -9,11 +9,10 @@ sources:
         schema: raw
       - name: matches
         description: "Match schedule with teams and stadiums"
-        schema: main
-
+        schema: raw
       - name: teams
         description: "Team lookup table"
-        schema: main      
+        schema: raw      
       - name: stadiums
         description: "Stadium information"
-        schema: main
+        schema: raw

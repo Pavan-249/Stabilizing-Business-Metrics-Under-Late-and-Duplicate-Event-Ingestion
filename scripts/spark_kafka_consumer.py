@@ -5,8 +5,14 @@ from pyspark.sql.types import *
 spark = SparkSession.builder \
     .appName("KafkaTicketConsumer") \
     .master("local[*]") \
-    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0") \
+    .config(
+        "spark.jars.packages",
+        "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0"
+    ) \
     .getOrCreate()
+
+spark.sparkContext.setLogLevel("WARN")
+
 schema = StructType([
     StructField("ticket_id", StringType()),
     StructField("match_id", StringType()),
@@ -17,44 +23,64 @@ schema = StructType([
     StructField("quantity", IntegerType()),
     StructField("price", DoubleType()),
     StructField("purchase_timestamp", StringType()),
-    StructField("ticket_type", StringType()),
-    # Add any other columns you have
+    StructField("ticket_type", StringType())
 ])
 
-df = spark.readStream \
+raw_stream = spark.readStream \
     .format("kafka") \
     .option("kafka.bootstrap.servers", "localhost:9092") \
-    .option("subscribe", "ticket_purchases_raw").option("startingOffsets", "earliest") \
+    .option("subscribe", "ticket_purchases_raw") \
+    .option("startingOffsets", "latest") \
     .load()
-parsed = df.select(
+
+parsed = raw_stream.select(
     from_json(col("value").cast("string"), schema).alias("data"),
-    col("timestamp").alias("kafka_timestamp")  # When Kafka received it
+    col("timestamp").alias("kafka_timestamp")
 )
 
-# Flatten the JSON structure
-events = parsed.select("data.*", "kafka_timestamp")
+events = parsed.select("data.*", "kafka_timestamp") \
+    .withColumn("purchase_timestamp", to_timestamp("purchase_timestamp")) \
+    .withColumn(
+        "ingest_timestamp",
+        col("purchase_timestamp") +
+        expr("""
+            CASE
+                WHEN rand() < 0.04 THEN INTERVAL 2 DAYS
+                WHEN rand() < 0.15 THEN INTERVAL 1 DAY
+                WHEN rand() < 0.30 THEN INTERVAL 6 HOURS
+                ELSE INTERVAL 15 MINUTES
+            END
+        """)
+    )
+def process_batch(batch_df, batch_id):
+    if batch_df.isEmpty():
+        return
 
-# Add ingest_timestamp (when Spark processes it)
-events = events.withColumn("ingest_timestamp", current_timestamp())
+    # Simulate duplicate delivery (5% of events)
+    dup_df = batch_df.sample(0.05, seed=42) \
+        .withColumn(
+            "ingest_timestamp",
+            col("ingest_timestamp") +
+            expr("""
+                CASE
+                    WHEN rand() < 0.01 THEN INTERVAL 2 DAYS
+                    WHEN rand() < 0.10 THEN INTERVAL 6 HOURS
+                    ELSE INTERVAL 15 MINUTES
+                END
+            """)
+        )
 
-# Convert purchase_timestamp string to actual timestamp
-events = events.withColumn(
-    "purchase_timestamp",
-    to_timestamp(col("purchase_timestamp"))
-)
+    final_df = batch_df.unionByName(dup_df)
 
-# Calculate ingestion lag
-events = events.withColumn(
-    "ingestion_lag_seconds",
-    unix_timestamp("ingest_timestamp") - unix_timestamp("purchase_timestamp")
-)
+    final_df.write \
+        .mode("append") \
+        .parquet("/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/streaming_output")
 
-# Write to console first (for testing)
+
 query = events.writeStream \
-    .outputMode("append") \
-    .format("parquet") \
-    .option("path", "data/streaming_output") \
-    .option("checkpointLocation", "data/checkpoint") \
-    .trigger(processingTime='5 seconds').start()
+    .foreachBatch(process_batch) \
+    .option("checkpointLocation", "/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/streaming_output/checkpoint") \
+    .trigger(processingTime="5 seconds") \
+    .start()
 
 query.awaitTermination()
