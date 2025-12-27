@@ -83,19 +83,22 @@ Metrics converge and stabilize when:
 
 ## Architecture
 
+## Data Pipeline Architecture
+```
 Python Producer
-↓
+       ↓
 Kafka (ticket_purchases_raw)
-↓
+       ↓
 Spark Structured Streaming
-↓
+       ↓
 Parquet (append-only, late + duplicate data)
-↓
+       ↓
 DuckDB (raw ingestion)
-↓
-dbt
-├── staging (deduplication & cleaning)
-└── marts (business metrics)
+       ↓
+     dbt
+       ├── staging (deduplication & cleaning)
+       └── marts (business metrics)
+```
 
 ![Alt text](diagrams/Architecture_diagram.png?raw=true "Architecture Diagram")
 
@@ -174,8 +177,11 @@ Generated using **Matplotlib**.
 - **Matplotlib** — metric instability visualization  
 
 ---
-
 ## Getting Started
+
+Found it interesting?
+This is how you can you get started:
+
 1. Run the Python producer to generate and stream ticket events.  
 2. Start Spark Structured Streaming to consume from Kafka and write to Parquet.  
 3. Load Parquet data into DuckDB.  
