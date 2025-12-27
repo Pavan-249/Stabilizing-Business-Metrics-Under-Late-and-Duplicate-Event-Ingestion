@@ -6,11 +6,14 @@ In a real setup, ticket bookings pass through multiple systems such as the booki
 
 This project simulates that reality and shows how raw sales numbers can change over time, and how a data pipeline can eventually produce stable and reliable metrics.
 
+![alt text]([http://url/to/img.png](https://images2.minutemediacdn.com/image/upload/c_crop,w_5085,h_2860,x_0,y_248/c_fill,w_2160,ar_16:9,f_auto,q_auto,g_auto/images%2FGettyImages%2Fmmsport%2F90min_en_international_web%2F01gmkc3h0qh2ch31ebcb.jpg){width=250px height=100px}
+
 ## Overview
 In real-time data systems, business metrics often change after they are first reported.  
-A dashboard queried today can show different numbers tomorrow, even for the same date.
+A dashboard queried today can show different numbers tomorrow, even for the same date. 
 
 This project demonstrates why metrics become unstable, how late and duplicate data cause drift, and how to design a pipeline that eventually stabilizes metrics.  
+
 ---
 
 ## The Problem
@@ -141,12 +144,12 @@ To demonstrate drift, the same sale date is observed at different ingestion time
 
 If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
 
-![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Unstable Model")
+![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Unstable Model"){width=250px height=100px}
 ---
 
 ### Mart Model
 With the Mart model for the same sale 20th December, observe the stability,
-![Alt text](dbt_project/dbs_obs/mart_stability.png?raw=true "Stable Model")
+![Alt text](dbt_project/dbs_obs/mart_stability.png?raw=true "Stable Model"){width=250px height=100px}
 
 ## Visualization
 
