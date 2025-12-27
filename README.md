@@ -136,7 +136,7 @@ To demonstrate drift, the same sale date is observed at different ingestion time
 
 If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
 
-![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Instable Model")
+![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Unstable Model")
 ---
 
 ### Mart Model
