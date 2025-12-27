@@ -71,6 +71,8 @@ dbt
 ├── staging (deduplication & cleaning)
 └── marts (business metrics)
 
+![Alt text](dbt_project/dbs_obs/Architecture_diagram.png?raw=true "Architecture Diagram")
+
 
 ---
 
@@ -131,11 +133,14 @@ To demonstrate drift, the same sale date is observed at different ingestion time
 | T0 + 1 day | 5,575 |
 | Final | 7,285 |
 
+
 If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
-![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Stable Model")
+
+![Alt text](dbt_project/dbs_obs/metric_instability.png?raw=true "Instable Model")
 ---
 
-### With the Mart model for the same sale 20th December, observe the stability,
+### Mart Model
+With the Mart model for the same sale 20th December, observe the stability,
 ![Alt text](dbt_project/dbs_obs/mart_stability.png?raw=true "Stable Model")
 
 ## Visualization
