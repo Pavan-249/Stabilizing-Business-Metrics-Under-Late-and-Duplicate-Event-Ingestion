@@ -74,12 +74,12 @@ def process_batch(batch_df, batch_id):
 
     final_df.write \
         .mode("append") \
-        .parquet("/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/streaming_output")
+        .parquet("../data/streaming_output")
 
 
 query = events.writeStream \
     .foreachBatch(process_batch) \
-    .option("checkpointLocation", "/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/streaming_output/checkpoint") \
+    .option("checkpointLocation", "../data/streaming_output/checkpoint") \
     .trigger(processingTime="5 seconds") \
     .start()
 

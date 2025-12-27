@@ -4,10 +4,10 @@ With the FIFA World Cup 2026 coming up in a few months, event organizers and pla
 
 In a real setup, ticket bookings pass through multiple systems such as the booking platform, payment gateway, and downstream processors. Not all events arrive at the same time, and some events get reported more than once due to retries, network delays, or system failures. As a result, the same ticket purchase can appear late or appear twice in the data.
 
-This project simulates that reality and shows how raw sales numbers can change over time, and how a data pipeline can eventually produce stable and reliable metrics.
-
 
 <img src="https://images2.minutemediacdn.com/image/upload/c_crop,w_5085,h_2860,x_0,y_248/c_fill,w_2160,ar_16:9,f_auto,q_auto,g_auto/images%2FGettyImages%2Fmmsport%2F90min_en_international_web%2F01gmkc3h0qh2ch31ebcb.jpg" width="800" height="600" alt="WC 2022 winners">
+
+This project simulates that reality and shows how raw sales numbers can change over time, and how a data pipeline can eventually produce stable and reliable metrics.
 
 ## Overview
 In real-time data systems, business metrics often change after they are first reported.  
@@ -39,7 +39,24 @@ As a result:
 
 ---
 
-## This Project Demonstrates
+## Metric Instability Analysis
+
+To demonstrate drift, the same sale date is observed at different ingestion times:
+
+| Observation Time | Tickets Sold |
+|------------------|--------------|
+| T0 + 1 hour | 183 |
+| T0 + 6 hours | 1,076 |
+| T0 + 1 day | 5,575 |
+| Final | 7,285 |
+
+
+If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
+
+<img src="diagrams/metric_instability.png" width="600" height="400" alt="Instable Model">
+
+
+---
 
 ### Late-Arriving Data
 Ticket purchase events are ingested hours or days after purchase, simulating:
@@ -80,7 +97,7 @@ dbt
 ├── staging (deduplication & cleaning)
 └── marts (business metrics)
 
-![Alt text](dbt_project/dbs_obs/Architecture_diagram.png?raw=true "Architecture Diagram")
+![Alt text](diagrams/Architecture_diagram.png?raw=true "Architecture Diagram")
 
 
 ---
@@ -131,27 +148,9 @@ ORDER BY purchase_timestamp, ingest_timestamp
 
 ---
 
-## Metric Instability Analysis
-
-To demonstrate drift, the same sale date is observed at different ingestion times:
-
-| Observation Time | Tickets Sold |
-|------------------|--------------|
-| T0 + 1 hour | 183 |
-| T0 + 6 hours | 1,076 |
-| T0 + 1 day | 5,575 |
-| Final | 7,285 |
-
-
-If you look at this carefully, you will observe that for the same sale date, you will observe varying entries across different observation times.
-
-<img src="dbt_project/dbs_obs/metric_instability.png" width="600" height="400" alt="Instable Model">
-
----
-
 ### Mart Model
 With the Mart model for the same sale 20th December, observe the stability,
-<img src="dbt_project/dbs_obs/mart_stability.png" width="600" height="400" alt="Stable Model">
+<img src="diagrams/mart_stability.png" width="600" height="400" alt="Stable Model">
 
 ## Visualization
 

@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv(
-    "/Users/pavankumar_s/Desktop/Data Engineering/real_time_tickets_observability/dbt_project/dbs_obs/data/exports/metric_instability.csv"
+    "../data/exports/etric_instability.csv"
 )
 
 plt.figure(figsize=(8, 5))
