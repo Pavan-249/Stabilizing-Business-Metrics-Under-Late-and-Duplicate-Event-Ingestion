@@ -1,18 +1,26 @@
 # Metric Instability in Real-Time Ticket Sales Pipelines
 
+With the FIFA World Cup 2026 coming up in a few months, event organizers and planners closely track ticket sales to plan logistics, staffing, and security. Demand is high and many users try to book tickets at the same time.
+
+In a real setup, ticket bookings pass through multiple systems such as the booking platform, payment gateway, and downstream processors. Not all events arrive at the same time, and some events get reported more than once due to retries, network delays, or system failures. As a result, the same ticket purchase can appear late or appear twice in the data.
+
+This project simulates that reality and shows how raw sales numbers can change over time, and how a data pipeline can eventually produce stable and reliable metrics.
+
 ## Overview
 In real-time data systems, business metrics often change after they are first reported.  
-A dashboard queried today can show different numbers tomorrow — even for the same date.
+A dashboard queried today can show different numbers tomorrow, even for the same date.
 
-This project demonstrates **why metrics become unstable**, how late and duplicate data cause drift, and how to design a pipeline that **eventually stabilizes metrics**.  
-The focus is **data correctness over time**, not just data movement.
-
+This project demonstrates why metrics become unstable, how late and duplicate data cause drift, and how to design a pipeline that eventually stabilizes metrics.  
 ---
 
 ## The Problem
 
 Business users often ask:
 > “How many tickets were sold on December 20?”
+
+As data engineers we often take time to go back to the logs and check what is really causing the issue. The problem is not the metrics only by themselves but also the added panic, hours of debugging and potential financial disasters.
+
+In this project, I built a robust pipeline that de-duplicates redundant transactions and reports consistent metrics.
 
 In production systems:
 - Events arrive late  
@@ -25,12 +33,9 @@ As a result:
 - Numbers change retroactively  
 - Dashboards can lose trust  
 
-As data engineers we often take time to go back to the logs and check what is really causing the issue. The problem is not the metrics only by themselves but also the added panic, hours of debugging and potential financial disasters.
-
-In this project, I built a robust pipeline that de-duplicates redundant transactions and reports consistent metrics.
 ---
 
-## What This Project Demonstrates
+## This Project Demonstrates
 
 ### Late-Arriving Data
 Ticket purchase events are ingested hours or days after purchase, simulating:
@@ -50,7 +55,7 @@ Metrics computed at different observation times can produce different results fo
 ### Metric Stabilization
 Metrics converge and stabilize when:
 - Data is **deduplicated by `ticket_id`**
-- **`purchase_timestamp`** is treated as the event time
+- **`purchase_timestamp`** is treated as the event time(in our case the ticket purchase)
 - Data flows through **raw**, **staging**, and **mart** layers
 
 ---
@@ -87,7 +92,7 @@ dbt
 | ingest_timestamp | When the event arrived in the pipeline |
 | ticket_type | Category of the ticket |
 | quantity | Number of tickets in the order |
-| price | Price per ticket |
+| price | Amount spent in buying all the tickets in the order |
 
 This table intentionally contains:
 - Late arrivals  
@@ -152,7 +157,6 @@ The project includes a plot (`metric_instability.csv`) showing how ticket counts
 - Final numbers stabilize only after ingestion completes  
 
 Generated using **Matplotlib**.
-
 
 ---
 
